@@ -7,6 +7,6 @@ API REST para gestão de barbearia, permitindo agendamentos de horários e contr
 
 ```bash
 # Clonar o repositório
-git clone https://github.com/seu-usuario/barbearia-api.git
+git clone https://github.com/codebydias/barbershop-api.git
 cd barbearia-api
 
