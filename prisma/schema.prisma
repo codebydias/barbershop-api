@@ -8,44 +8,80 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRolesType {
+  ADIM
+  USER
+}
+
 model User {
+  id       Int           @id @default(autoincrement())
+  name     String
+  email    String        @unique
+  password String
+  role     UserRolesType
 
-  id  Int @id @default(autoincrement())
-  name      String
-  age Int
-  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
+  Booking Booking[]
 
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@map("users")
 }
 
 model Barber {
-  id   Int    @id @default(autoincrement())
-  name String
+  id           Int    @id @default(autoincrement())
+  barberShopId Int    @map("barber_shop_id")
+  name         String
+  cpf          String
+  description  String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  booking    Booking[]
+  BarberShop BarberShop @relation(fields: [barberShopId], references: [id])
 }
 
 model BarberShop {
-  id Int @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
+  name   String
+  adress String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  barber Barber[]
 }
 
 model Service {
-  id Int @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  price       Float
+  durantion   String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  booking Booking[]
+}
+
+enum BookingStatusType {
+  PENDING
+  DONE
 }
 
 model Booking {
-  id Int @id @default(autoincrement())
+  id        Int               @id @default(autoincrement())
+  barberId  Int               @map("barber_id")
+  userId    Int               @map("user_id")
+  serviceId Int               @map("service_id")
+  status    BookingStatusType
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user    User      @relation(fields: [userId], references: [id])
+  barber  Barber    @relation(fields: [barberId], references: [id])
+  Service Service[]
 }
