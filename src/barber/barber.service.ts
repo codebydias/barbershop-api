@@ -31,7 +31,8 @@ export class BarberService {
     })
 
     return {
-      'status': 'ok'
+      'status': 'ok',
+      'email': barber.email
     };
 
 
