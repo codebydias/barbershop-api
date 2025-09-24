@@ -1,7 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { CreateBarberDto } from './dto/create.dto';
-import { formatDateToBR } from 'src/shared/utils/data';
+import { hash } from 'bcryptjs';
+
 
 
 @Injectable()
@@ -16,11 +17,13 @@ export class BarberService {
       throw new ConflictException('This email is already registered')
     }
 
+    const hashPassword = await hash(data.password, 12);
+
     const barber = await this.prisma.barber.create({
       data: {
         name: data.name,
         email: data.email,
-        password: data.password,
+        password: hashPassword,
         cpf: data.cpf,
         description: data.description ?? null,
         barberShopId: 1,
