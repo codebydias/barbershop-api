@@ -25,14 +25,29 @@ export class AuthService {
 
     const user = await this.primsaService.user.findUnique({ where: { email } });
 
-    if (!user) throw new UnauthorizedException("Invalid Credentials");
+    if (user) {
+      const isValidPassword = compare(password, user.password);
 
-    const isValidPassword = compare(password, user.password);
+      if (!isValidPassword)
+        throw new UnauthorizedException("Invalid credentials");
 
-    if (!isValidPassword)
-      throw new UnauthorizedException("Invalid credentials");
+      return this.generateAccesToken(user.id, user.role);
+    }
 
-    return this.generateAccesToken(user.id, user.role);
+    const barber = await this.primsaService.barber.findUnique({
+      where: { email },
+    });
+
+    if (barber) {
+      const isValidPassword = compare(data.password, barber.password);
+
+      if (!isValidPassword)
+        throw new UnauthorizedException("invalid credentials");
+
+      return this.generateAccesToken(barber.id, barber.role);
+    }
+
+    throw new UnauthorizedException("Invalid Credentials");
   }
 
   private generateAccesToken(userId: number, role: string) {
