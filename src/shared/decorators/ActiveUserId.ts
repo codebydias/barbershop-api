@@ -16,3 +16,5 @@ const ActiveUserId = createParamDecorator((data, context: ExecutionContext) => {
 
   return userId;
 });
+
+export default ActiveUserId;

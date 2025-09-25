@@ -16,3 +16,5 @@ const ActiveRole = createParamDecorator((data, context: ExecutionContext) => {
 
   return role;
 });
+
+export default ActiveRole;
