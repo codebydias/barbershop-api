@@ -3,9 +3,10 @@
 import { Module } from "@nestjs/common";
 import { UserModule } from './user/user.module';
 import { BarberModule } from './barber/barber.module';
+import { BarbershopModule } from './barbershop/barbershop.module';
 
 @Module({
-  imports: [UserModule, BarberModule],
+  imports: [UserModule, BarberModule, BarbershopModule],
   controllers: [],
   providers: [],
 })
